@@ -1,0 +1,20 @@
+# ROS 2 build products
+/install/
+/build/
+/log/
+/*.log
+
+# colcon metadata
+/colcon.meta
+
+# VSCode, CLion, etc.
+.vscode/
+/.idea/
+/*.swp
+
+# Python caches
+__pycache__/
+/*.pyc
+
+# OS files
+.DS_Store
