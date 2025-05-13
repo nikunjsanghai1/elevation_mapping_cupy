@@ -42,6 +42,21 @@ colcon build --symlink-install --packages-select elevation_mapping_cupy elevatio
 src/elevation_mapping_cupy/elevation_mapping_cupy/config/core/core_param.yaml, 
 similarly robot config is mentioned in menzi/base.yaml under /config/setups 
 ```
+The repo needs a pointcloud topic for successful demo, .yaml files need to be changed. 
+```
+# for core_param.yaml
+map_frame: 'arista1/base_link'                               # The map frame where the odometry source uses.
+base_frame: 'arista1/base_link'                    # The robot's base frame. This frame will be a center of the map. arista1/base_frame
+corrected_map_frame: 'arista1/base_link'
+
+#change these to robot specific parameter, currently base_frame and map_frame are same because of a gazebo related timestamp issue.
+
+#for menzi/base.yaml
+    subscribers:
+      front_cam:
+        topic_name: '/arista1/zedm/depth_raw/points' #this needs to be changed to the pointcloud topic name 
+        data_type: pointcloud
+```
 
 ### Troubleshooting
 There can be errors associated with some dependency that is needed after docker image is built and repo is cloned because some bloat has not been severed. For now there is some bloat that is being installed, some repos will cause conflicts. **Code will not compile if ros-numpy is below 0.5**, to address that install ros-numpy, it will install numpy 1.24 , then force numpy 1.23.5 installation.
