@@ -1,0 +1,102 @@
+elevation_mapping_node:
+  ros__parameters:
+
+    publish_statistics_fps: 2.0          # any value > 0 turns it on
+    enable_pointcloud_publishing: true   # so you can inspect "after filter" cloud
+    
+    # Settings of the plugins. (The plugins should be stored in script/plugins)
+    # min_filter fills in minimum value around the invalid cell.
+    min_filter:                                   
+      enable: True                                # weather to load this plugin
+      fill_nan: True                             # Fill nans to invalid cells of elevation layer.
+      is_height_layer: True                       # If this is a height layer (such as elevation) or not (such as traversability)
+      layer_name: "min_filter"                    # The layer name.
+      extra_params:                               # This params are passed to the plugin class on initialization.
+        dilation_size: 2                         # The patch size to apply
+        iteration_n: 10                           # The number of iterations
+        debug: true                              # Enable debug output for min filter
+
+    # Apply smoothing.
+    smooth_filter:
+      enable: False
+      fill_nan: False
+      is_height_layer: True
+      layer_name: "smooth"
+      extra_params:
+        input_layer_name: "min_filter"
+
+    # Apply inpainting using opencv
+    inpainting:
+      enable: False
+      fill_nan: False
+      is_height_layer: True
+      layer_name: "inpaint"
+      extra_params:
+        method: "telea"                           # telea or ns
+
+    robot_centric_elevation:                                  # Use the same name as your file name.
+      enable: False                                # weather to load this plugin
+      fill_nan: False                              # Fill nans to invalid cells of elevation layer.
+      is_height_layer: True                       # If this is a height layer (such as elevation) or not (such as traversability)
+      layer_name: "robot_centric_elevation"                 # The layer name.
+      extra_params:                               # This params are passed to the plugin class on initialization.
+        resolution: 0.04
+        threshold: 1.1
+        use_threshold: True
+
+    semantic_filter:
+      type: "semantic_filter"
+      enable: False
+      fill_nan: False
+      is_height_layer: False
+      layer_name: "max_categories"
+      extra_params:
+        classes: ['^sem_.*$']
+
+    semantic_traversability:
+      type: "semantic_traversability"
+      enable: False
+      fill_nan: False
+      is_height_layer: False
+      layer_name: "semantic_traversability"
+      extra_params:
+        layers: ['traversability','robot_centric_elevation']
+        thresholds: [0.3,0.5]
+        type: ['traversability', 'elevation']
+
+    features_pca:
+      type: "features_pca"
+      enable: False
+      fill_nan: False
+      is_height_layer: False
+      layer_name: "pca"
+      extra_params:
+        process_layer_names: ["^feat_.*$"]
+
+    pointcloud_channel_fusions:
+      rgb: 'color'
+      default: 'average'
+
+    image_channel_fusions:
+      rgb: 'color'
+      default: 'exponential'
+      feat_.*: 'exponential'
+
+    subscribers:
+      front_cam:
+        topic_name: '/arista1/zedm/depth_raw/points'
+        data_type: pointcloud
+
+    publishers:
+      elevation_map_raw:
+        layers: ['elevation', 'traversability', 'variance','rgb']
+        basic_layers: ['elevation']
+        fps: 5.0
+      elevation_map_filter:
+        layers: ['min_filter', 'smooth', 'inpaint', 'elevation']
+        basic_layers: ['min_filter']
+        fps: 3.0
+
+   # map_frame: 'arista1/odom'
+   # base_frame: 'arista1/base_link'
+   # corrected_map_frame: 'arista1/odom'

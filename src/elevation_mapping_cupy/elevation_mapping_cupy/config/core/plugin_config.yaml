@@ -1,0 +1,30 @@
+# min_filter fills in minimum value around the invalid cell.
+min_filter:                                   
+  enable: True                                # Keep this enabled for basic functionality
+  fill_nan: False                             
+  is_height_layer: True                       
+  layer_name: "min_filter"                    
+  extra_params:                               
+    dilation_size: 1                         
+    iteration_n: 30                           
+
+# Apply smoothing.
+smooth_filter:
+  enable: False                               # Disabled
+  fill_nan: False
+  is_height_layer: True
+  layer_name: "smooth"
+
+# Apply inpainting using opencv
+inpainting:
+  enable: False                               # Disabled
+  fill_nan: False
+  is_height_layer: True
+  layer_name: "inpaint"
+
+# Apply smoothing for inpainted layer
+erosion:
+  enable: False                               # Disabled
+  fill_nan: False
+  is_height_layer: False
+  layer_name: "erosion"
