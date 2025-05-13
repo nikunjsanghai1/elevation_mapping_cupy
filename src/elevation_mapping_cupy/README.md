@@ -36,8 +36,12 @@ download the rosdeps and dependencies, it will download a lot of bloat, that wil
 ```
 colcon build --symlink-install --packages-select elevation_mapping_cupy elevation_mapping_msgs
 ```
-The launch file that works in elevation_mapping.launch.py, in case any changes need to be made the parameters of the algorithm are mentioned under src/elevation_mapping_cupy/elevation_mapping_cupy/config/core/core_param.yaml, similarly robot config is mentioned in menzi/base.yaml under /config/setups 
-
+**The launch file that works in elevation_mapping.launch.py** 
+-in case any changes need to be made the parameters of the algorithm are mentioned under
+```
+src/elevation_mapping_cupy/elevation_mapping_cupy/config/core/core_param.yaml, 
+similarly robot config is mentioned in menzi/base.yaml under /config/setups 
+```
 
 ### Troubleshooting
 There can be errors associated with some dependency that is needed after docker image is built and repo is cloned because some bloat has not been severed. For now there is some bloat that is being installed, some repos will cause conflicts. **Code will not compile if ros-numpy is below 0.5**, to address that install ros-numpy, it will install numpy 1.24 , then force numpy 1.23.5 installation.
