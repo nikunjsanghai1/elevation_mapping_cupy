@@ -11,7 +11,7 @@ docker build \
 ```
 Here, set the mount workspace as local directory and image name=docker image
 ```
-docker run -it --rm \
+docker run -it \
   --gpus all \
   --device /dev/dri \
   --group-add $(getent group video | cut -d: -f3) \
